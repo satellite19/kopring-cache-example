@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: kopring-cache-example
+  
+  # H2 Database 설정
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  # Caffeine Cache 설정
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000
+
+# 로깅 설정
+logging:
+  level:
+    Exposed: DEBUG
+    org:
+      springframework:
+        cache: DEBUG
+      jetbrains:
+        exposed: DEBUG
+
+# 캐시 재적재 API 보안 설정
+cache:
+  reload:
+    allowed-ips: 127.0.0.1,0:0:0:0:0:0:0:1
+    auth-username: admin
+    auth-password: password123
