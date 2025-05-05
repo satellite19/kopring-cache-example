@@ -4,7 +4,9 @@ import com.example.kopringcacheexample.domain.model.Merchant
 import com.example.kopringcacheexample.domain.repository.MerchantRepository
 import com.example.kopringcacheexample.infrastructure.adapter.persistence.entity.MerchantEntity
 import com.example.kopringcacheexample.infrastructure.adapter.persistence.table.MerchantTable
+import com.example.kopringcacheexample.infrastructure.configuration.ExposedQueryFactory
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
 
@@ -12,15 +14,27 @@ import org.springframework.stereotype.Repository
  * 가맹점 레포지토리 구현 (Exposed 사용)
  */
 @Repository
-class MerchantRepositoryImpl : MerchantRepository {
+class MerchantRepositoryImpl(
+    private val exposedQueryFactory: ExposedQueryFactory
+) : MerchantRepository {
 
     /**
      * 모든 가맹점 조회
      */
-    override fun findAll(): List<Merchant> = transaction {
-        MerchantEntity.all().map { it.toDomain() }
+    override fun findAll(): List<Merchant> {
+        return exposedQueryFactory.fetchAll {
+            MerchantTable.selectAll()
+        }.map {
+            Merchant(
+                merchantId = it[MerchantTable.merchantId],
+                storeId = it[MerchantTable.storeId],
+                merchantName = it[MerchantTable.merchantName],
+                merchantStatus = it[MerchantTable.merchantStatus],
+            )
+        }
     }
-    
+
+
     /**
      * 가맹점 ID와 상점 ID로 가맹점 조회
      */
