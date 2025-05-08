@@ -27,6 +27,7 @@ class ErrorCodeController(private val cacheManagementService: CacheManagementSer
     @GetMapping("/virtual-account/{errorCode}")
     fun getVirtualAccountErrorCode(@PathVariable errorCode: String): ResponseEntity<ErrorCodeResponse> {
         val response = cacheManagementService.getVirtualAccountErrorCode(errorCode)
+        response
         return ResponseEntity.ok(response)
     }
 }

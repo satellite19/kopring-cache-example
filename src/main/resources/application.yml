@@ -1,6 +1,9 @@
 spring:
   application:
     name: kopring-cache-example
+  config:
+    log4j2:
+      location: classpath:/log4j2.yml
   
   # H2 Database 설정
   datasource:
@@ -27,6 +30,7 @@ logging:
     org:
       springframework:
         cache: DEBUG
+        jdbc.datasource.init: DEBUG
       jetbrains:
         exposed: DEBUG
 
@@ -36,3 +40,8 @@ cache:
     allowed-ips: 127.0.0.1,0:0:0:0:0:0:0:1
     auth-username: admin
     auth-password: password123
+
+# 관리자 API 보안 설정
+admin:
+  auth-username: admin
+  auth-password: admin123
